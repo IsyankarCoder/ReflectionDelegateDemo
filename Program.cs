@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ReflectionDelegateDemo
 {
@@ -14,12 +15,25 @@ namespace ReflectionDelegateDemo
             var property = homeControllerType.GetProperties().FirstOrDefault(pr => pr.IsDefined(typeof(DataAttribute), true));
 
             var getMethod = property.GetMethod;
+            var stopWatch = Stopwatch.StartNew();       
 
-            var dict = (IDictionary<string, object>)getMethod.Invoke(homeController, Array.Empty<object>());
-            Console.WriteLine(dict["Name"]);
+            for (int i = 0; i < 100000000; i++)
+            {
+                var dict = (IDictionary<string, object>)getMethod.Invoke(homeController, Array.Empty<object>());
+            }
+            Console.WriteLine(stopWatch.Elapsed);
+            //   Console.WriteLine(dict["Name"]);
 
+            // Func<HomeController,IDictionary<string, object>> func = (controller) => controller.Data;
 
+            var deleg = (Func<HomeController, IDictionary<string, object>>)getMethod.CreateDelegate(typeof(Func<HomeController, IDictionary<string, object>>));    
+            stopWatch = Stopwatch.StartNew();
+            for (int i = 0; i < 100000000; i++)
+            {
+                var dict = deleg(homeController);
+            }
 
+             Console.WriteLine(stopWatch.Elapsed);
         }
     }
 }
