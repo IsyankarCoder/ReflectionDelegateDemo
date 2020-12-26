@@ -33,6 +33,15 @@ namespace ReflectionDelegateDemo
                 var dict = deleg(homeController);
             }
 
+            Console.WriteLine(stopWatch.Elapsed);
+             
+
+            stopWatch = Stopwatch.StartNew();
+            for (int i = 0; i < 100000000; i++)
+            {
+                homeController.Data = new Dictionary<string, object>();
+            }
+
              Console.WriteLine(stopWatch.Elapsed);
         }
     }
