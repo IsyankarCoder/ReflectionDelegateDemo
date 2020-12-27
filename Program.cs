@@ -28,7 +28,8 @@ namespace ReflectionDelegateDemo
 
             //   var deleg = (Func<HomeController, IDictionary<string, object>>)getMethod.CreateDelegate(typeof(Func<HomeController, IDictionary<string, object>>));    
 
-            var deleg = PropertyHelper<HomeController>.MakeFastPropertyGetter<IDictionary<string, object>>(property);
+            //var deleg = PropertyHelper<HomeController>.MakeFastPropertyGetter<IDictionary<string, object>>(property);
+            var deleg = PropertyHelper.MakeFastPropertyGetter<IDictionary<string, object>>(property);
 
             stopWatch = Stopwatch.StartNew();
             for (int i = 0; i < 100000000; i++)
